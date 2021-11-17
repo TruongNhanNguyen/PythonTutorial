@@ -39,20 +39,32 @@
     - [Python Built-in Functions](#python-built-in-functions)
   - [Simple Input and Output](#simple-input-and-output)
     - [Console Input and Output](#console-input-and-output)
+      - [The `print` Function](#the-print-function)
+      - [The `input` Function](#the-input-function)
+      - [A Sample Program](#a-sample-program)
     - [Files](#files)
+      - [Reading from a File](#reading-from-a-file)
+      - [Writing from a File](#writing-from-a-file)
   - [Exceptions Handling](#exceptions-handling)
+    - [Common Exception Types](#common-exception-types)
     - [Raising an Exception](#raising-an-exception)
     - [Catching an Exception](#catching-an-exception)
   - [Iterators and Generators](#iterators-and-generators)
+    - [Iterators](#iterators)
+    - [Generators](#generators)
   - [Additional Python Conveniences](#additional-python-conveniences)
+    - [Conditional Expressions](#conditional-expressions)
+    - [Comprehensive Syntax](#comprehensive-syntax)
+    - [Packing and Unpacking of Sequences](#packing-and-unpacking-of-sequences)
+    - [Simultaneous Assignments](#simultaneous-assignments)
   - [Scope and Namespaces](#scope-and-namespaces)
+    - [First-Class Objects](#first-class-objects)
   - [Modules and the `Import` Statement](#modules-and-the-import-statement)
+    - [Creating a New Module](#creating-a-new-module)
     - [Existing Modules](#existing-modules)
   - [Object-Oriented Programming](#object-oriented-programming)
   - [Algorithm Analysis](#algorithm-analysis)
   - [Data Structures and Algorithms](#data-structures-and-algorithms)
-    - [Data Structures](#data-structures)
-    - [Algorithms](#algorithms)
 
 ### The Python Interpreter
 
@@ -620,32 +632,615 @@ in Python). When `max` is called in this way, it will compare `abs(a)` to `abs(b
 
 ## Simple Input and Output
 
+In this section, we address the basics of input and output in Python, describing standard input and output through the user console, and Python’s support for reading and writing text files.
+
 ### Console Input and Output
+
+#### The `print` Function
+
+The built-in function, `print`, is used to generate standard output to the console. In its simplest form, it prints an arbitrary sequence of arguments, separated by spaces, and followed by a trailing newline character. For example, the command `print('maroon', 5)` outputs the string
+`'maroon 5\n'`. Note that arguments need not be string instances. A non-string argument `x` will be displayed as `str(x)`. Without any arguments, the command `print()` outputs a single newline character.
+
+The `print` function can be customized through the use of the following keyword parameters (see Section [Keyword Parameters](#keyword-parameters) for a discussion of keyword parameters)
+
+- By default, the print function inserts a separating space into the output between each pair of arguments. The separator can be customized by providing a desired separating string as a keyword parameter, `sep`. For example, colon-separated output can be produced as `print(a, b, c, sep=':')`. The separating string need not be a single character; it can be a longer string, and it can be the empty string, `sep=''`, causing successive arguments to be directly concatenated.
+- By default, a trailing newline is output after the final argument. An alternative trailing string can be designated using a keyword parameter, `end`. Designating the empty string `end=''` suppresses all trailing characters.
+- By default, the `print` function sends its output to the standard console. However, output can be directed to a file by indicating an output file stream (see Section [Files](#files)) using `file` as a keyword parameter.
+
+#### The `input` Function
+
+The primary means for acquiring information from the user console is a built-in function named input. This function displays a prompt, if given as an optional parameter, and then waits until the user enters some sequence of characters followed by the return key. The formal return value of the function is the string of characters that were entered strictly before the return key (i.e., no newline character exists in the returned string).
+
+When reading a numeric value from the user, a programmer must use the `input` function to get the string of characters, and then use the `int` or float syntax to construct the numeric value that character string represents. That is, if a call to `response = input()` reports that the user entered the characters, `'2013'`, the syntax `int(response)` could be used to produce the integer value 2013. It is quite common to combine these operations with a syntax such as
+
+```python
+year = int(input('In what year you were born? '))
+```
+
+if we assume that the user will enter an appropriate response (In Section [Exception Handling](#exceptions-handling) we discuss error handling in such a situation).
+
+Because `input` returns a string as its result, use of that function can be combined with the existing functionality of the string class. For example, if the user enters multiple pieces of information on the same line, it is common to call the split method on the result, as in
+
+```python
+reply = input('Enter x and y, separated by spaces: ')
+pieces = reply.split()    # returns a list of strings, as separated by spaces
+x = float(pieces[0])
+y = float(pieces[1])
+```
+
+#### A Sample Program
+
+Here is a simple, but complete, program that demonstrates the use of the `input` and `print` functions.
+
+```python
+age = int(input('Enter your age in year: '))
+max_heart_rate = 209.6 - (0.67 * age)
+target = 0.65 * max_heart_rate
+print('Your target fat-burning heart rate is ', target)
+```
 
 ### Files
 
+Files are typically accessed in Python beginning with a call to a built-in function, named `open`, that returns a proxy for interactions with the underlying file. For example, the command, `fp = open('sample.txt')`, attempts to open a file named `'sample.txt'`, returning a proxy that allows read-only access to the text file.
+
+The `open` function accepts an optional second parameter that determines the access mode. The default mode is `r` for reading. Other common modes are `w` for writing to the file (causing any existing file with that name to be overwritten), or `a` for appending to the end of an existing file. Although we focus on use of text files, it is possible to work with binary files, using access modes such as `rb` or `wb`.
+
+When processing a file, the proxy maintains a current position within the file as an offset from the beginning, measured in number of bytes. When opening a file with mode `r` or `w` , the position is initially 0; if opened in append mode, `a`, the position is initially at the end of the file. The syntax `fp.close()` closes the file associated with proxy `fp`, ensuring that any written contents are saved. A summary of methods for reading and writing a file is given in ***Table*** below.
+
+***Table***: Behaviors for interacting with a text file via a file proxy (named `fp`)
+
+| **Calling Syntax** | **Description** |
+| --- | --- |
+| `fp.read()` | Return the (remaining) contents of a readable file as a string |
+| `fp.read(k)` | Return the next `k` bytes of a readable file as a string |
+| `fp.readline()` | Return (remainder of) the current line of a readable file as a string |
+| `fp.readlines()` | Return all (remaining) lines of a readable file as a list of strings |
+| `for line in fp:` | Iterate all (remaining) lines of a readable file |
+| `fp.seek(k)` | Change the current position to be at the k-th byte of the file |
+| `fp.tell()` | Return the current position, measured as byte-offset from the start |
+| `fp.write(string)` | Write given string at current position of the writable file |
+| `fp.writelines(seq)` | Write each of the strings of the given sequence at the current position of the writable file. This command does *not* insert any newlines, beyond those that are embedded in the strings |
+| `print(..., file=fp)` | Redirect output of print function to the file |
+
+#### Reading from a File
+
+The most basic command for reading via a proxy is the `read` method. When invoked on file proxy `fp`, as `fp.read(k)`, the command returns a string representing the next `k` bytes of the file, starting at the current position. Without a parameter, the syntax `fp.read()` returns the remaining contents of the file in entirety. For convenience, files can be read a line at a time, using the `readline` method to read one line, or the `readlines` method to return a list of all remaining lines. Files also support the for-loop syntax, with iteration being line by line (e.g., `for line in fp:`).
+
+#### Writing from a File
+
+When a file proxy is writable, for example, if created with access mode `w` or `a`, text can be written using methods `write` or `writelines`. For example, if we define `fp = open('results.txt',w)`, the syntax `fp.write('Hello World.\n')` writes a single line to the file with the given string. Note well that write does not explicitly add a trailing newline, so desired newline characters must be embedded directly in the string parameter. Recall that the output of the `print` method can be redirected to a file using a keyword parameter, as described in Section [Keyword Parameters](#keyword-parameters).
+
 ## Exceptions Handling
+
+Exceptions are unexpected events that occur during the execution of a program. An exception might result from a logical error or an unanticipated situation. In Python, ***exceptions*** (also known as ***errors***) are objects that are ***raised*** (or ***thrown***) by code that encounters an unexpected circumstance. The Python interpreter can also raise an exception should it encounter an unexpected condition, like running out of memory. A raised error may be ***caught*** by a surrounding context that "handles" the exception in an appropriate fashion. If uncaught, an exception causes the interpreter to stop executing the program and to report an appropriate message to the console. In this section, we examine the most common error types in Python, the mechanism for catching and handling errors that have been raised, and the syntax for raising errors from within user-defined blocks of code.
+
+### Common Exception Types
+
+Python includes a rich hierarchy of exception classes that designate various categories of errors; ***Table*** below shows many of those classes. The `Exception` class serves as a base class for most other error types. An instance of the various subclasses encodes details about a problem that has occurred. Several of these errors may be raised in exceptional cases by behaviors introduced. For example, use of an undefined identifier in an expression causes a `NameError`, and errant use of the dot notation, as in `foo.bar()`, will generate an `AttributeError` if object `foo` does not support a member named `bar`.
+
+***Table***: Common exception classes in Python
+
+| **Class** | **Description** |
+| --- | --- |
+| `Exception` | A base class for most error types |
+| `AttributeError` | Raised by syntax `obj.foo`, if `obj` has no member named `foo` |
+| `EOFError` | Raised if "end of file" reached for console or file input |
+| `IOError` | Raised upon failure of I/O operation (e.g., opening file) |
+| `IndexError` | Raised if index to sequence is out of bounds |
+| `KeyError` | Raised if nonexistent key requested for `set` or `dictionary` |
+| `KeyboardInterrupt` | Raised if user types `ctrl-C` while program is executing |
+| `NameError` | Raised if nonexistent identifier used |
+| `StopIteration` | Raised by `next(iterator)` if no element. See Section [Iterators and Generators](#iterators-and-generators) |
+| `TypeError` | Raised when wrong type of parameter is sent to a function |
+| `ValueError` | Raised when parameter has invalid value (e.g., `sqrt(−5)`) |
+| `ZeroDivisionError` | Raised when any division operator used with 0 as divisor |
+
+Sending the wrong number, type, or value of parameters to a function is another
+common cause for an exception. For example, a call to `abs('hello')` will raise a `TypeError` because the parameter is not numeric, and a call to `abs(3, 5)` will raise a `TypeError` because one parameter is expected. A `ValueError` is typically raised when the correct number and type of parameters are sent, but a value is illegitimate for the context of the function. For example, the int constructor accepts a string, as with `int('137')`, but a `ValueError` is raised if that string does not represent an integer, as with `int('3.14')` or `int('hello')`.
+
+Python’s sequence types (e.g., `list`, `tuple`, and `str`) raise an `IndexError` when syntax such as `data[k]` is used with an integer `k` that is not a valid index for the given sequence (as described in Section [Python Built-in Classes](#python-built-in-classes)). Sets and dictionaries raise a `KeyError` when an attempt is made to access a nonexistent element.
 
 ### Raising an Exception
 
+An exception is thrown by executing the `raise` statement, with an appropriate instance of an exception class as an argument that designates the problem. For example, if a function for computing a square root is sent a negative value as a parameter, it can raise an exception with the command
+
+```python
+raise ValueError('x cannot be negative!')
+```
+
+This syntax raises a newly created instance of the `ValueError` class, with the error message serving as a parameter to the constructor. If this exception is not caught within the body of the function, the execution of the function immediately ceases and the exception is propagated to the calling context (and possibly beyond).
+
+When checking the validity of parameters sent to a function, it is customary to first verify that a parameter is of an appropriate type, and then to verify that it has an appropriate value. For example, the `sqrt` function in Python’s `math` library performs error-checking that might be implemented as follows
+
+```python
+def sqrt(x):
+    if not isinstance(x, (int, float)):
+        raise TypeError('x must be numeric')
+    else x < 0:
+        raise ValueError('x cannot be negative')
+    # do the real work here
+```
+
+Checking the type of an object can be performed at run-time using the built-in function, `isinstance`. In simplest form, `isinstance(obj, cls)` returns `True` if object, `obj`, is an instance of class, `cls`, or any subclass of that type. In the above example, a more general form is used with a tuple of allowable types indicated with the second parameter. After confirming that the parameter is numeric, the function enforces an expectation that the number be nonnegative, raising a `ValueError` otherwise.
+
+How much error-checking to perform within a function is a matter of debate. Checking the type and value of each parameter demands additional execution time and, if taken to an extreme, seems counter to the nature of Python. Consider the built-in `sum` function, which computes a sum of a collection of numbers. An implementation with rigorous error-checking might be written as follows
+
+```python
+def sum(values):
+    if not isinstance(values, collections.Iterable):
+        raise TypeError('parameters must be an iterable type')
+    total = 0
+    for v in values:
+        if not isinstance(v, (int, float)):
+            raise TypeError('elements must be numeric values')
+        total += v
+    return total
+```
+
+The abstract base class, `collections.Iterable`, includes all of Python’s iterable containers types that guarantee support for the for-loop syntax (e.g., `list`, `tuple`, `set`); we discuss iterables in Section [Iterators and Generators](#iterators-and-generators), and the use of *modules*, such as `collections`, in Section [Modules and the `Import` Statement](#modules-and-the-import-statement). Within the body of the for loop, each element is verified as numeric before being added to the total. A far more direct and clear implementation of this
+function can be written as follows
+
+```python
+def sum(values):
+    total = 0
+    for v in values:
+        total += v
+    return total
+```
+
+Interestingly, this simple implementation performs exactly like Python’s built-in version of the function. Even without the explicit checks, appropriate exceptions are raised naturally by the code. In particular, if `values` is not an iterable type, the attempt to use the for-loop syntax raises a `TypeError` reporting that the object is not iterable. In the case when a user sends an iterable type that includes a nonnumerical element, such as `sum([3.14, 'oops'])`, a `TypeError` is naturally raised by the evaluation of expression `total += v`. The error message
+
+```sh
+unsupported operand type(s) for +: 'float' and 'str'
+```
+
+should be sufficiently informative to the caller. Perhaps slightly less obvious is the
+error that results from `sum(['alpha', 'beta'])`. It will technically report a failed
+attempt to add an `int` and `str`, due to the initial evaluation of `total += alpha`,
+when total has been initialized to 0.
+
 ### Catching an Exception
+
+There are several philosophies regarding how to cope with possible exceptional cases when writing code. For example, if a division `x/y` is to be computed, there is clear risk that a `ZeroDivisionError` will be raised when variable `y` has value 0. In an ideal situation, the logic of the program may dictate that `y` has a nonzero value, thereby removing the concern for error. However, for more complex code, or in a case where the value of y depends on some external input to the program, there remains some possibility of an error.
+
+One philosophy for managing exceptional cases is to ***“look before you leap”***. The goal is to entirely avoid the possibility of an exception being raised through the use of a proactive conditional test. Revisiting our division example, we might avoid the offending situation by writing
+
+```python
+if y != 0:
+    ratio = x / y
+else:
+    ...do something else...
+```
+
+A second philosophy, often embraced by Python programmers, is that ***“it is easier to ask for forgiveness than it is to get permission”***. This quote is attributed to Grace Hopper, an early pioneer in computer science. The sentiment is that we need not spend extra execution time safeguarding against every possible exceptional case, as long as there is a mechanism for coping with a problem after it arises. In Python, this philosophy is implemented using a ***try-except*** control structure. Revising our first example, the division operation can be guarded as follows
+
+```python
+try:
+    ratio = x / y
+except ZeroDivisionError:
+    ...do something else...
+```
+
+In this structure, the "try" block is the primary code to be executed. Although it is a single command in this example, it can more generally be a larger block of indented code. Following the try-block are one or more "except" cases, each with an identified error type and an indented block of code that should be executed if the designated error is raised within the try-block.
+
+The relative advantage of using a try-except structure is that the non-exceptional case runs efficiently, without extraneous checks for the exceptional condition. However, handling the exceptional case requires slightly more time when using a try-except structure than with a standard conditional statement. For this reason, the try-except clause is best used when there is reason to believe that the exceptional case is relatively unlikely, or when it is prohibitively expensive to proactively evaluate a condition to avoid the exception.
+
+Exception handling is particularly useful when working with user input, or when reading from or writing to files, because such interactions are inherently less predictable. In Section [Files](#files), we suggest the syntax, `fp = open('sample.txt')`, for opening a file with read access. That command may raise an `IOError` for a variety of reasons, such as a non-existent file, or lack of sufficient privilege for opening a file. It is significantly easier to attempt the command and catch the resulting error than it is to accurately predict whether the command will succeed.
+
+We continue by demonstrating a few other forms of the try-except syntax. Exceptions are objects that can be examined when caught. To do so, an identifier must be established with a syntax as follows
+
+```python
+try:
+    fp = open('sample.txt')
+except IOError as e:
+    print('Unable to open file: ', e)
+```
+
+In this case, the name, e, denotes the instance of the exception that was thrown, and printing it causes a detailed error message to be displayed (e.g., "file not found").
+
+A try-statement may handle more than one type of exception. For example, consider the following command from Section [Console Input and Output](#console-input-and-output):
+
+```python
+age = int(input('Enter your age in year: '))
+```
+
+This command could fail for a variety of reasons. The call to input will raise an `EOFError` if the console input fails. If the call to input completes successfully, the int constructor raises a `ValueError` if the user has not entered characters representing a valid integer. If we want to handle two or more types of errors in the same way, we can use a single except-statement, as in the following example
+
+```python
+age = −1            # an initially invalid choice
+while age <= 0:
+    try:
+        age = int(input('Enter your age in years: '))
+        if age <= 0:
+            print('Your age must be positive')
+    except (ValueError, EOFError):
+        print('Invalid response')
+```
+
+We use the tuple, (`ValueError`, `EOFError`), to designate the types of errors that we wish to catch with the except-clause. In this implementation, we catch either error, print a response, and continue with another pass of the enclosing while loop. We note that when an error is raised within the try-block, the remainder of that body is immediately skipped. In this example, if the exception arises within the call to input, or the subsequent call to the int constructor, the assignment to `age` never occurs, nor the message about needing a positive value. Because the value of `age` will be unchanged, the while loop will continue. If we preferred to have the while
+loop continue without printing the `'Invalid response'` message, we could have written the exception-clause as
+
+```python
+except (ValueError, IOError):
+    pass
+```
+
+The keyword, `pass`, is a statement that does nothing, yet it can serve syntactically as a body of a control structure. In this way, we quietly catch the exception, thereby allowing the surrounding while loop to continue.
+
+In order to provide different responses to different types of errors, we may use two or more except-clauses as part of a try-structure. In our previous example, an `EOFError` suggests a more insurmountable error than simply an errant value being entered. In that case, we might wish to provide a more specific error message, or perhaps to allow the exception to interrupt the loop and be propagated to a higher context. We could implement such behavior as follows
+
+```python
+age = −1            # an initially invalid choice
+while age <= 0:
+    try:
+        age = int(input('Enter your age in years: '))
+        if age <= 0:
+            print('Your age must be positive')
+    except ValueError:
+        print('That is an invalid age specification')
+    except EOFError:
+        print('There was an unexpected error reading input.')
+        raise      # let's re-raise this exception
+```
+
+In this implementation, we have separate except-clauses for the `ValueError` and `EOFError` cases. The body of the clause for handling an `EOFError` relies on another technique in Python. It uses the raise statement without any subsequent argument, to re-raise the same exception that is currently being handled. This allows us to provide our own response to the exception, and then to interrupt the while loop and propagate the exception upward.
+
+In closing, we note two additional features of try-except structures in Python. It is permissible to have a final except-clause without any identified error types, using syntax `except:`, to catch any other exceptions that occurred. However, this technique should be used sparingly, as it is difficult to suggest how to handle an error of an unknown type. A try-statement can have a `finally` clause, with a body of code that will always be executed in the standard or exceptional cases, even when an uncaught or re-raised exception occurs. That block is typically used for critical cleanup work, such as closing an open file.
 
 ## Iterators and Generators
 
+### Iterators
+
+In Section [Loops](#loops), we introduced the for-loop syntax beginning as
+
+```python
+for element in iterable:
+```
+
+and we noted that there are many types of objects in Python that qualify as being iterable. Basic container types, such as list, tuple, and set, qualify as iterable types. Furthermore, a string can produce an iteration of its characters, a dictionary can produce an iteration of its keys, and a file can produce an iteration of its lines. User-defined types may also support iteration. In Python, the mechanism for iteration is based upon the following conventions
+
+- An ***iterator*** is an object that manages an iteration through a series of values. If variable, `i`, identifies an iterator object, then each call to the built-in function, `next(i)`, produces a subsequent element from the underlying series, with a `StopIteration` exception raised to indicate that there are no further elements.
+- An ***iterable*** is an object, `obj`, that produces an *iterator* via the syntax `iter(obj)`.
+
+By these definitions, an instance of a list is an iterable, but not itself an iterator.
+With `data = [1, 2, 4, 8]`, it is not legal to call `next(data)`. However, an iterator
+object can be produced with syntax, `i = iter(data)`, and then each subsequent call
+to `next(i)` will return an element of that list. The for-loop syntax in Python simply
+automates this process, creating an iterator for the give iterable, and then repeatedly
+calling for the next element until catching the `StopIteration` exception.
+
+More generally, it is possible to create multiple iterators based upon the same iterable object, with each iterator maintaining its own state of progress. However, iterators typically maintain their state with indirect reference back to the original collection of elements. For example, calling `iter(data)` on a list instance produces an instance of the `list_iterator` class. That iterator does not store its own copy of the list of elements. Instead, it maintains a current *index* into the original list, representing the next element to be reported. Therefore, if the contents of the original list are modified after the iterator is constructed, but before the iteration is complete, the iterator will be reporting the *updated* contents of the list.
+
+Python also supports functions and classes that produce an implicit iterable series of values, that is, without constructing a data structure to store all of its values at once. For example, the call `range(1000000)` does *not* return a list of numbers; it returns a range object that is iterable. This object generates the million values one at a time, and only as needed. Such a ***lazy evaluation*** technique has great advantage. In the case of range, it allows a loop of the form, `for j in range(1000000):`, to execute without setting aside memory for storing one million values. Also, if such a loop were to be interrupted in some fashion, no time will have been spent computing unused values of the range.
+
+We see lazy evaluation used in many of Python’s libraries. For example, the dictionary class supports methods `keys()`, `values()`, and `items()`, which respectively produce a "view" of all keys, values, or (key,value) pairs within a dictionary. None of these methods produces an explicit list of results. Instead, the views that are produced are iterable objects based upon the actual contents of the dictionary. An explicit list of values from such an iteration can be immediately constructed by calling the `list` class constructor with the iteration as a parameter. For example, the syntax `list(range(1000))` produces a list instance with values from 0 to 999, while the syntax `list(d.values())` produces a list that has elements based upon the current values of dictionary `d`. We can similarly construct a `tuple` or `set` instance based
+upon a given iterable.
+
+### Generators
+
+The most convenient technique for creating iterators in Python is through the use of ***generators***. A generator is implemented with a syntax that is very similar to a function, but instead of returning values, a `yield` statement is executed to indicate each element of the series. As an example, consider the goal of determining all factors of a positive integer. For example, the number 100 has factors 1, 2, 4, 5, 10, 20, 25, 50, 100. A traditional function might produce and return a list containing all factors, implemented as
+
+```python
+def factors(n):                 # traditional function that computes factors
+    results = []                # store factors in a new list
+    for k in range(1,n+1):
+        if n % k == 0:          # divides evenly, thus k is a factor
+            results.append(k)   # add k to the list of factors
+    return results              # return the entire list
+```
+
+In contrast, an implementation of a *generator* for computing those factors could be
+implemented as follows
+
+```python
+def factors(n):             # generator that computes factors
+    for k in range(1,n+1):
+        if n % k == 0:      # divides evenly, thus k is a factor
+            yield k         # yield this factor as next result
+```
+
+Notice use of the keyword `yield` rather than `return` to indicate a result. This indicates to Python that we are defining a generator, rather than a traditional function. It is illegal to combine `yield` and `return` statements in the same implementation, other than a zero-argument `return` statement to cause a generator to end its execution. If a programmer writes a loop such as `for factor in factors(100):`, an instance of our generator is created. For each iteration of the loop, Python executes our procedure until a `yield` statement indicates the next value. At that point, the procedure is temporarily interrupted, only to be resumed when another value is requested. When the flow of control naturally reaches the end of our procedure (or a  zero-argument return statement), a `StopIteration` exception is automatically raised. Although this particular example uses a single `yield` statement in the source code, a generator can
+rely on multiple `yield` statements in different constructs, with the generated series
+determined by the natural flow of control. For example, we can greatly improve the efficiency of our generator for computing factors of a number, `n`, by only testing values up to the square root of that number, while reporting the factor `n//k` that is associated with each `k` (unless `n//k` equals `k`). We might implement such a generator as follows
+
+```python
+def factors(n):                 # generator that computes factors
+    k = 1
+    while k * k < n:            # while k < sqrt(n)
+        if n % k == 0:
+            yield k
+            yield n // k
+        k += 1
+    if k * k == n:              # special case if n is perfect square
+        yield k
+```
+
+We should note that this generator differs from our first version in that the factors are not generated in strictly increasing order. For example, `factors(100)` generates the series 1,100,2,50,4,25,5,20,10.
+
+In closing, we wish to emphasize the benefits of lazy evaluation when using a generator rather than a traditional function. The results are only computed if requested, and the entire series need not reside in memory at one time. In fact, a generator can effectively produce an infinite series of values. As an example, the ***Fibonacci*** numbers form a classic mathematical sequence, starting with value 0, then value 1, and then each subsequent value being the sum of the two preceding values. Hence, the Fibonacci series begins as: 0,1,1,2,3,5,8,13,.... The following generator produces this infinite series.
+
+```python
+def fibonacci():
+    a = 0
+    b = 1
+    while True:
+        yield a                 # keep going...
+        future = a + b          # report value, a, during this pass
+        a = b                   # this will be next value reported
+        b = future              # and subsequently this
+```
+
 ## Additional Python Conveniences
+
+In this section, we introduce several features of Python that are particularly convenient for writing clean, concise code. Each of these syntaxes provide functionality that could otherwise be accomplished using functionality that we have introduced earlier in this chapter. However, at times, the new syntax is a more clear and direct expression of the logic.
+
+### Conditional Expressions
+
+Python supports a ***conditional expression*** syntax that can replace a simple control structure. The general syntax is an expression of the form
+
+```python
+expr1 if condition else expr2
+```
+
+This compound expression evaluates to `expr1` if the condition is `True`, and otherwise
+evaluates to `expr2`. For those familiar with Java or C++, this is equivalent to the
+syntax
+
+```cpp
+ condition ? expr1 : expr2
+```
+
+in those languages.
+
+As an example, consider the goal of sending the absolute value of a variable, `n`, to a function (and without relying on the built-in abs function, for the sake of example). Using a traditional control structure, we might accomplish this as follows
+
+```python
+if n >= 0:
+    param = n
+else:
+    param = -n
+result = foo(pram)          # call the function
+```
+
+With the conditional expression syntax, we can directly assign a value to variable, param, as follows
+
+```python
+param = n if n >= 0 else -n # pick the appropriate value
+result = foo(param)         # call the function
+```
+
+In fact, there is no need to assign the compound expression to a variable. A conditional expression can itself serve as a parameter to the function, written as follows
+
+```python
+result = foo(n if n >= 0 else -n)
+```
+
+Sometimes, the mere shortening of source code is advantageous because it avoids the distraction of a more cumbersome control structure. However, we recommend that a conditional expression be used only when it improves the readability of the source code, and when the first of the two options is the more “natural” case, given its prominence in the syntax. (We prefer to view the alternative value as more exceptional).
+
+### Comprehensive Syntax
+
+A very common programming task is to produce one series of values based upon the processing of another series. Often, this task can be accomplished quite simply in Python using what is known as a ***comprehension syntax***. We begin by demonstrating ***list comprehension***, as this was the first form to be supported by Python. Its general form is as follows
+
+```python
+expression for value in iterable if condition
+```
+
+We note that both *expression* and *condition* may depend on value, and that the ***if-clause*** is optional. The evaluation of the comprehension is logically equivalent to the following traditional control structure for computing a resulting list
+
+```python
+result = []
+for value in iterable:
+    if condition:
+        result.append(expression)
+```
+
+As a concrete example, a list of the squares of the numbers from 1 to `n`, that is `[1,4,9,16,25,... ,n2]`, can be created by traditional means as follows
+
+```python
+squares = []
+for k in range(1, n + 1):
+    squares.append(k * k)
+```
+
+With list comprehension, this logic is expressed as follows
+
+```python
+squares = [k * k for k in range(1, n + 1)]
+```
+
+As a second example, Section [Iterators and Generators](#iterators-and-generators) introduced the goal of producing a list of factors for an integer `n`. That task is accomplished with the following list comprehension
+
+```python
+factor = [k for k in range(1, n + 1) if n % k == 0]
+```
+
+Python supports similar comprehension syntaxes that respectively produce a set, generator, or dictionary. We compare those syntaxes using our example for producing the squares of numbers.
+
+```python
+[k * k for k in range(1, n + 1)]        # list comprehension
+{k * k for k in range(1, n + 1)}        # set comprehension
+(k * k for k in range(1, n + 1))        # generator comprehension
+{k: k * K for k in range(1, n + 1)}     # dictionary comprehension
+```
+
+The generator syntax is particularly attractive when results do not need to be stored in memory. For example, to compute the sum of the first `n` squares, the generator syntax, `total = sum(k * k for k in range(1, n+1))`, is preferred to the use of an explicitly instantiated list comprehension as the parameter.
+
+### Packing and Unpacking of Sequences
+
+Python provides two additional conveniences involving the treatment of tuples and other sequence types. The first is rather cosmetic. If a series of comma-separated expressions are given in a larger context, they will be treated as a single tuple, even if no enclosing parentheses are provided. For example, the assignment
+
+```python
+data = 2, 4, 6, 8
+```
+
+results in identifier, `data`, being assigned to the `tuple (2, 4, 6, 8)`. This behavior
+is called ***automatic packing*** of a tuple. One common use of packing in Python is when returning multiple values from a function. If the body of a function executes the command
+
+```python
+return x + y
+```
+
+it will be formally returning a single object that is the tuple `(x, y)`.
+
+As a dual to the packing behavior, Python can automatically ***unpack*** a sequence, allowing one to assign a series of individual identifiers to the elements of sequence. As an example, we can write
+
+```python
+a, b, c, d = range(7, 11)
+```
+
+which has the effect of assigning `a=7, b=8, c=9, and d=10`, as those are the four values in the sequence returned by the call to range. For this syntax, the right-hand side expression can be any *iterable* type, as long as the number of variables on the left-hand side is the same as the number of elements in the iteration.
+
+This technique can be used to unpack tuples returned by a function. For example, the built-in function, `divmod(a, b)`, returns the pair of values `(a // b, a % b)` associated with an integer division. Although the caller can consider the return value to be a single tuple, it is possible to write
+
+```python
+quotient, remainder = divmod(a, b)
+```
+
+to separately identify the two entries of the returned tuple. This syntax can also be used in the context of a for loop, when iterating over a sequence of iterables, as in
+
+```python
+for x, y in [(7, 2), (5, 8), (6, 4)]:
+```
+
+In this example, there will be three iterations of the loop. During the first pass, `x=7`
+and `y=2,` and so on. This style of loop is quite commonly used to iterate through key-value pairs that are returned by the `items()` method of the dict class, as in
+
+```python
+for k, v in mapping.items():
+```
+
+### Simultaneous Assignments
+
+The combination of automatic packing and unpacking forms a technique known as ***simultaneous assignment***, whereby we explicitly assign a series of values to a series of identifiers, using a syntax
+
+```python
+x, y, z = 5, 6, 7
+```
+
+In effect, the right-hand side of this assignment is automatically packed into a tuple, and then automatically unpacked with its elements assigned to the three identifiers on the left-hand side.
+
+When using a simultaneous assignment, all of the expressions are evaluated on the right-hand side before any of the assignments are made to the left-hand variables. This is significant, as it provides a convenient means for swapping the values associated with two variables
+
+```python
+j, k = k, j
+```
+
+With this command, `j` will be assigned to the old value of `k`, and `k` will be assigned
+to the old value of `j`. Without simultaneous assignment, a swap typically requires
+more delicate use of a temporary variable, such as
+
+```python
+temp = j
+j = k
+k = temp
+```
+
+With the simultaneous assignment, the unnamed tuple representing the packed values on the right-hand side implicitly serves as the temporary variable when performing such a swap.
+
+The use of simultaneous assignments can greatly simplify the presentation of code. As an example, we reconsider the generator on previous section that produces the ***Fibonacci*** series. The original code requires separate initialization of variables `a` and `b` to begin the series. Within each pass of the loop, the goal was to reassign `a` and `b`, respectively, to the values of `b` and `a + b`. At the time, we accomplished this with brief use of a third variable. With simultaneous assignments, that generator can be implemented more directly as follows
+
+```python
+def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+```
 
 ## Scope and Namespaces
 
+When computing a sum with the syntax `x + y` in Python, the names `x` and `y` must have been previously associated with objects that serve as values; a `NameError` will be raised if no such definitions are found. The process of determining the value associated with an identifier is known as ***name resolution***.
+
+Whenever an identifier is assigned to a value, that definition is made with a specific ***scope***. Top-level assignments are typically made in what is known as ***global*** scope. Assignments made within the body of a function typically have scope that is ***local*** to that function call. Therefore, an assignment, `x = 5`, within a function has no effect on the identifier, `x`, in the broader scope.
+
+Each distinct scope in Python is represented using an abstraction known as a ***namespace***. A namespace manages all identifiers that are currently defined in a given scope.
+
+Python implements a namespace with its own dictionary that maps each identifying string (e.g.,
+`n`) to its associated value. Python provides several ways to examine a given namespace. The function, `dir`, reports the names of the identifiers in a given namespace (i.e., the keys of the dictionary), while the function, `vars`, returns the full dictionary. By default, calls to `dir()` and `vars()` report on the most locally enclosing namespace in which they are executed.
+
+When an identifier is indicated in a command, Python searches a series of namespaces in the process of name resolution. First, the most locally enclosing scope is searched for a given name. If not found there, the next outer scope is searched, and so on. We will continue our examination of namespaces, when discussing Python’s treatment of object-orientation. We will see
+that each object has its own namespace to store its attributes, and that classes each
+have a namespace as well.
+
+### First-Class Objects
+
+In the terminology of programming languages, ***first-class objects*** are instances of a type that can be assigned to an identifier, passed as a parameter, or returned by a function. All of the data types we introduced in Section [Python Built-in Classes](#python-built-in-classes), such as int and list, are clearly first-class types in Python. In Python, functions and classes are also treated as first-class objects. For example, we could write the following
+
+```python
+scream = print          # assign name ’scream’ to the function denoted as ’print’
+scream('Hello')         # call that function
+```
+
+In this case, we have not created a new function, we have simply defined scream as an alias for the existing print function. While there is little motivation for precisely this example, it demonstrates the mechanism that is used by Python to allow one function to be passed as a parameter to another.We noted that the built-in function, `max`, accepts an optional keyword parameter to specify a non-default order when computing a maximum. For example, a caller can use
+the syntax, `max(a, b, key=abs)`, to determine which value has the larger absolute value. Within the body of that function, the formal parameter, `key`, is an identifier that will be assigned to the actual parameter, `abs`.
+
+In terms of namespaces, an assignment such as `scream = print`, introduces the identifier, scream, into the current namespace, with its value being the object that represents the built-in function, print. The same mechanism is applied when a user-defined function is declared. For example, our count function from Section [Function](#functions) beings with the following syntax
+
+```python
+def count(data, target):
+    ...
+```
+
+Such a declaration introduces the identifier, `count`, into the current namespace, with the value being a function instance representing its implementation. In similar fashion, the name of a newly defined class is associated with a representation of that class as its value
+
 ## Modules and the `Import` Statement
+
+We have already introduced many functions (e.g., `max`) and classes (e.g., `list`) that are defined within Python’s built-in namespace. Depending on the version of Python, there are approximately 130-150 definitions that were deemed significant enough to be included in that built-in namespace.
+
+Beyond the built-in definitions, the standard Python distribution includes perhaps tens of thousands of other values, functions, and classes that are organized in additional libraries, known as ***modules***, that can be ***imported*** from within a program. As an example, we consider the `math` module. While the built-in namespace includes a few mathematical functions (e.g., `abs`, `min`, `max`, `round`), many more are relegated to the `math` module (e.g., `sin`,`cos`, `sqrt`). That module also defines approximate values for the mathematical constants, `pi` and `e`.
+
+Python’s `import` statement loads definitions from a module into the current namespace. One form of an import statement uses a syntax such as the following
+
+```python
+from math import pi, sqrt
+```
+
+This command adds both `pi` and `sqrt`, as defined in the `math` module, into the current namespace, allowing direct use of the identifier, `pi`, or a call of the function, `sqrt(2)`. If there are many definitions from the same module to be imported, an asterisk may be used as a wild card, as in, `from math import *`, but this form should be used sparingly. The danger is that some of the names defined in the module may conflict with names already in the current namespace (or being imported from another module), and the import causes the new definitions to replace existing ones.
+
+Another approach that can be used to access many definitions from the same module is to import the module itself, using a syntax such as
+
+```python
+import math
+```
+
+Formally, this adds the identifier, `math`, to the current namespace, with the module as its value. (Modules are also first-class objects in Python.) Once imported, individual definitions from the module can be accessed using a fully-qualified name, such as `math.pi` or `math.sqrt(2)`.
+
+### Creating a New Module
+
+To create a new module, one simply has to put the relevant definitions in a file named with a `.py` suffix. Those definitions can be imported from any other `.pyfile` within the same project directory. For example, if we were to put the definition of our count function (see Section [Function](#functions)) into a file named `utility.py`, we could import that function using the syntax, `from utility import count`.
+
+It is worth noting that top-level commands with the module source code are executed when the module is first imported, almost as if the module were its own script. There is a special construct for embedding commands within the module that will be executed if the module is directly invoked as a script, but not when the module is imported from another script. Such commands should be placed in a body of a conditional statement of the following form,
+
+```python
+if __name__ == '__main__':
+```
+
+Using our hypothetical `utility.py` module as an example, such commands will be executed if the interpreter is started with a command python `utility.py`, but not when the utility module is imported into another context. This approach is often used to embed what are known as ***unit tests*** within the module.
 
 ### Existing Modules
 
+***Table*** provides a summary of a few available modules that are relevant to a study of data structures. We have already discussed the math module briefly. In the remainder of this section, we highlight another module that is particularly important for some of the data structures and algorithms that we will study later in this book.
+
+***Table***: Some existing Python modules relevant to data structures and algorithms.
+
+| **Module Name** | **Description** |
+| `array` | Provides compact array storage for primitive types |
+| `collections` | Defines additional data structures and abstract base classes involving collections of objects |
+| `copy` | Defines general functions for making copies of objects |
+| `heapq` | Provides heap-based priority queue functions |
+| `math` | Defines common mathematical constants and functions |
+| `os` | Provides support for interactions with the operating system |
+| `random` | Provides random number generation |
+| `re` | Provides support for processing regular expressions |
+| `sys` | Provides additional level of interaction with the Python interpreter |
+| `time` | Provides support for measuring time, or delaying a program |
+
 ## Object-Oriented Programming
+
+See [OOP](../OOP/README.md)
 
 ## Algorithm Analysis
 
 ## Data Structures and Algorithms
 
-### Data Structures
-
-### Algorithms
+See [DSA](../DataStructures)
