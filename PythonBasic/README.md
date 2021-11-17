@@ -1224,6 +1224,7 @@ Using our hypothetical `utility.py` module as an example, such commands will be 
 ***Table***: Some existing Python modules relevant to data structures and algorithms.
 
 | **Module Name** | **Description** |
+| --- | --- |
 | `array` | Provides compact array storage for primitive types |
 | `collections` | Defines additional data structures and abstract base classes involving collections of objects |
 | `copy` | Defines general functions for making copies of objects |
