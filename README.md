@@ -44,7 +44,7 @@
 
 ## Background 📚
 
-You can learn Python basic at **[Python.org](https://docs.python.org/3/tutorial/index.html)** 💻
+You can learn Python basic [here](PythonBasic/README.md). More information can be searched at **[Python.org](https://docs.python.org/3/tutorial/index.html)** 💻
 
 ## Data Structures and Algorithms 📉
 
