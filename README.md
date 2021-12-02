@@ -6,7 +6,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.9.9-1f425f.svg?logo=python&logoColor=0095b6)](https://www.python.org/downloads/release/python-399/)
 [![Visual Studio Code](https://img.shields.io/badge/Visual_Studio_Code-1.62.2-1f425f.svg?logo=visual-studio-code&logoColor=007ACC&labelColor=000000)](https://code.visualstudio.com/)
-[![Git](https://img.shields.io/badge/Git-2.34.0.windows.1-F05032?logo=git&logoColor=F05032)](https://git-scm.com/)
+[![Git](https://img.shields.io/badge/Git-2.34.1.windows.1-F05032?logo=git&logoColor=F05032)](https://git-scm.com/)
 [![Github](https://img.shields.io/badge/Github-000000?logo=github&logoColor=181717&labelColor=white)](https://github.com/)
 
 </p>
