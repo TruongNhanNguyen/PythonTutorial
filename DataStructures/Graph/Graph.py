@@ -1,6 +1,52 @@
 from copy import deepcopy
 from AdaptablePriorityQueue import AdaptableHeap
+from Heap import HeapPriorityQueue
 
+
+class Partition:
+    """ Union-find structure for maintaining disjoint sets. """
+    
+    # nested Position class
+    class Position:
+        __slots__ = '_container', '_element', '_size', '_parent'
+
+        def __init__(self, container, e):
+            """ Create a new position that is the leader of its own group. """
+            self._container = container                     # reference to Partition instance
+            self._element = e
+            self._size = 1
+            self._parent = self                             # convention for a group leader
+
+        
+        def element(self):
+            """ Return element stored at this position. """
+            return self._element
+
+        
+    # public Partition methods
+    def make_group(self, e):
+        """ Make a new group containing element e, and return its Position. """
+        return self.Position(self, e)
+
+
+    def find(self, p):
+        """ Find the group containing p and return the position of its leader. """
+        if p._parent != p:
+            p._parent = self.find(p._parent)                # overwrite p._parent after recursion
+        return p._parent
+
+    
+    def union(self, p, q):
+        """ Merge the group containing elements p and p (if distinct). """
+        a = self.find(p)
+        b = self.find(q)
+        if a is not b:                                      # only merge if different groups
+            if a._size > b._size:
+                b._parent = a
+                a._size += b._size
+            else:
+                a._parent = b
+                b._size += a._size
 
 class Graph:
     """ Representation of a simple graph using an adjency map. """
@@ -312,3 +358,31 @@ def MST_PrimJarnik(g):
                     pq.update(pqlocator[v], d[v], (v, link))    # update the pq entry
 
     return tree
+
+
+def MST_Kruskal(g):
+    """ Compute the minimum spanning tree of a graph using Kruskal's algorithm.
+    Return a list of edge that comprise the MST.
+    The element of the graph's edges are assumed to be weighted """
+
+    tree = []                               # list of edges in spanning tree
+    pq = HeapPriorityQueue()                # entries aer edges in g, with weighted as key
+    forest = Partition()                    # keep track of forest clusters
+    position = {}                           # map each node to its Partition entry
+
+    for v in g.vertices():
+        position[v] = forest.make_group(v)
+
+    for e in g.edges():
+        pq.add(e.element(), e)              # edge's element is assumed to be its weighted
+
+    size = g.vertex_count()
+    while len(tree) != size - 1 and not pq.is_empty():
+        # tree not spanning and unprocessed edges remain
+        weight, edge = pq.remove_min()
+        u, v = edge.endpoints()
+        a = forest.find(position[u])
+        b = forest.find(position[v])
+        if a != b:
+            tree.append(edge)
+            forest.union(a, b)
