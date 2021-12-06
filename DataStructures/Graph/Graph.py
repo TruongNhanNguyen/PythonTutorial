@@ -386,3 +386,5 @@ def MST_Kruskal(g):
         if a != b:
             tree.append(edge)
             forest.union(a, b)
+
+    return tree
