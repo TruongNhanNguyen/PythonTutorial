@@ -159,13 +159,13 @@ for key in reversed(MapOfEvents):
     print(key, end=' ')
 
 print('\nNumber of events: ', len(MapOfEvents))
-print('Event occured in 1945 or immediately later: ', MapOfEvents.find_ge(1945))
-print('Event occured immediately after 1910: ', MapOfEvents.find_gt(1910))
-print('Event occured immediately before 1897', MapOfEvents.find_lt(1897))
-print('Event occured earliest: ', MapOfEvents.find_min())
-print('Event occured latest: ', MapOfEvents.find_max())
+print('Event occurred in 1945 or immediately later: ', MapOfEvents.find_ge(1945))
+print('Event occurred immediately after 1910: ', MapOfEvents.find_gt(1910))
+print('Event occurred immediately before 1897', MapOfEvents.find_lt(1897))
+print('Event occurred earliest: ', MapOfEvents.find_min())
+print('Event occurred latest: ', MapOfEvents.find_max())
 
-print('Events occured in years between 500 and 1900: ')
+print('Events occurred in years between 500 and 1900: ')
 for event in MapOfEvents.find_range(500, 1900):
     print(event)
 
