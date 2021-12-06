@@ -38,22 +38,3 @@ class UnsortedTableMap(MapBase):
         """ Generate iteration of the map's item's key """
         for item in self._table:
             yield item._key
-
-
-# M = UnsortedTableMap()
-# M['VietNam'] = 'HaNoi'
-# M['France'] = 'Paris'
-# M['USA'] = 'Washington'
-# M['China'] = 'Beijing'
-# M['Korea'] = 'Seoul'
-# M['Singapore'] = 'Singapore'
-# M['Cuba'] = 'La Habana'
-# M['Canada'] = 'Ottawa'
-# M['Brasil'] = 'Brasilia'
-# M['Australia'] = 'Canberra'
-
-# print(len(M))
-# print(M['France'])
-# for country in M:
-#     print(country)
-
