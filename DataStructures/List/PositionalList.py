@@ -199,17 +199,17 @@ p.replace(p_9, 100)
 
 print('List before sorted: ')
 for elem in p:
-    print(elem)
+    print(elem, end=' ')
 
 p.sort()
 
-print('List after sorted in nondecreasing order: ')
+print('\nList after sorted in nondecreasing order: ')
 for elem in p:
-    print(elem)
+    print(elem, end=' ')
 
 p.sort(reverse=True)
 
-print('List after sorted in nonincreasing order: ')
+print('\nList after sorted in nonincreasing order: ')
 for elem in p:
-    print(elem)
+    print(elem, end=' ')
 
