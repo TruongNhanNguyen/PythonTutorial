@@ -30,20 +30,3 @@ class ChainHashMap(HashMapBase):
                 for key in bucket:
                     yield key
 
-
-# chm = ChainHashMap()
-# chm[54] = 'Math'
-# chm[28] = 'Physic'
-# chm[41] = 'Geogerbra'
-# chm[18] = 'Literature'
-# chm[10] = 'Geography'
-# chm[36] = 'Physical Education'
-# chm[25] = 'Social Relationship'
-# chm[38] = 'Calculus'
-# chm[12] = 'France'
-# chm[90] = 'Swimming'
-
-# for key in chm:
-#     print(key)
-
-# print(chm[10])
