@@ -118,9 +118,9 @@ You can learn Python basic [here](PythonBasic/README.md). More information can b
 - [x] Ford Fulkerson algorithms
 - [x] Depth-first search Algorithm (DFS)
 - [x] Breath-first search Algorithm (BFS)
-- [ ] Dijkstra's Algorithm
-- [ ] Kruskal's Algorithm
-- [ ] Prim's Algorithm
+- [x] Dijkstra's Algorithm
+- [x] Kruskal's Algorithm
+- [x] Prim's Algorithm
 
 ## Objected oriented programming 🎯
 
