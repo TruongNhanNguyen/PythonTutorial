@@ -1,11 +1,15 @@
 class TicTacToe:
     """ A simple Tic-Tec-Toe game. """
 
+    # define number of rows and columns of the game board
+    ROWS = 3
+    COLS = 3
+
     __slots__ = '_board', '_player'
 
     def __init__(self):
-        """ Start a new game. """
-        self._board = [[' '] * 3 for _ in range(3)]
+        """ Start a new game board. """
+        self._board = [[' '] * self.COLS for _ in range(self.ROWS)]
         self._player = 'X'
 
 
