@@ -100,12 +100,12 @@ while not done:
     grade = input()
     if grade == '':
         done = True
-    else if grade not in points:
-        print('Unknown grade '{0}' being ignored'.format(grade))
+    elif grade not in points:
+        print('Unknown grade {0} being ignored'.format(grade))
     else:
         num_courses += 1
         total_points += points[grade]
-if num_course > 0:
+if num_courses > 0:
     print('Your GPA is {0:.3}'.format(total_points / num_courses))
 ```
 
