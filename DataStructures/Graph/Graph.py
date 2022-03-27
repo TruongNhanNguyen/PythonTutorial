@@ -1,6 +1,6 @@
 from copy import deepcopy
-from AdaptablePriorityQueue import AdaptableHeap
-from Heap import HeapPriorityQueue
+from .AdaptablePriorityQueue import AdaptableHeap
+from .Heap import HeapPriorityQueue
 
 
 class Partition:
