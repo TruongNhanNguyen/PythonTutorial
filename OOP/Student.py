@@ -26,9 +26,9 @@ class Course:
 	def addStudent(self, student):
 		if len(self._studentsList) < self._maxStudent:
 		    self._studentsList.append(student)
-	
-	def getAverageGrade(self):
-		avarageGrade = 0
+
+    def getAverageGrade(self):
+        avarageGrade = 0
 		for student in self._studentsList:
 			avarageGrade += student.getGrade()
 		return avarageGrade / len(self._studentsList)

@@ -20,21 +20,21 @@ class ArrayStack:
 
     def push(self, obj):
         """ Add element at the top of the stack """
-        self._data.append(obj)                  # new item is stored at the end of the list
+        self._data.append(obj)      # new item is stored at the end of the list
 
     def top(self):
         """ Return (but not remove) the element at the top of the stack
             Raise Empty exception if the stack is empty """
         if self.is_empty():
             raise Empty('Stack is empty!')
-        return self._data[-1]                   # last item in the list
+        return self._data[-1]       # last item in the list
 
     def pop(self):
         """ Remove and return the element from the top of the stack (i.e LIFO)
             Raise Empty exception if stack is empty """
         if self.is_empty():
             raise Empty('Stack is empty!')
-        return self._data.pop()                 # remove the last item from the list
+        return self._data.pop()     # remove the last item from the list
 
     def __str__(self):
         """ Print the stack's content """
@@ -46,13 +46,13 @@ def reverse_file(filename):
     S = ArrayStack()
     original = open(filename)
     for line in original:
-        S.push(line.rstrip('\n'))               # we will reinsert new line when writing
+        S.push(line.rstrip('\n'))   # we will reinsert new line when writing
     original.close()
 
     # now we overwrite with contents in LIFO order
-    output = open(filename, 'w')                # reopening file overwrite original
+    output = open(filename, 'w')    # reopening file overwrite original
     while not S.is_empty():
-        output.write(S.pop() + '\n')            # re-insert new line character
+        output.write(S.pop() + '\n')    # re-insert new line character
     output.close()
 
 S = ArrayStack()

@@ -12,10 +12,10 @@ class Partition:
 
         def __init__(self, container, e):
             """ Create a new position that is the leader of its own group. """
-            self._container = container                     # reference to Partition instance
+            self._container = container        # reference to Partition instance
             self._element = e
             self._size = 1
-            self._parent = self                             # convention for a group leader
+            self._parent = self                # convention for a group leader
 
         
         def element(self):
@@ -32,7 +32,8 @@ class Partition:
     def find(self, p):
         """ Find the group containing p and return the position of its leader. """
         if p._parent != p:
-            p._parent = self.find(p._parent)                # overwrite p._parent after recursion
+            # overwrite p._parent after recursion
+            p._parent = self.find(p._parent)
         return p._parent
 
     
@@ -40,7 +41,7 @@ class Partition:
         """ Merge the group containing elements p and p (if distinct). """
         a = self.find(p)
         b = self.find(q)
-        if a is not b:                                      # only merge if different groups
+        if a is not b:               # only merge if different groups
             if a._size > b._size:
                 b._parent = a
                 a._size += b._size
@@ -126,14 +127,14 @@ class Graph:
 
     def edges(self):
         """ Return a set of all edges of the graph. """
-        result = set()                                                       # avoid double reporting edges of undirected graph
+        result = set()      # avoid double reporting edges of undirected graph
         for secondary_map in self._outgoing.values():
-            result.update(secondary_map.values())                            # add edges to resulting set
+            result.update(secondary_map.values())   # add edges to resulting set
         return result 
 
     def get_edge(self, u, v):
         """ Return the edge from u to v, or None if not adjacent. """
-        return self._outgoing[u].get(v)                                      # return None if v not adjacent
+        return self._outgoing[u].get(v)     # return None if v not adjacent
 
     def degree(self, v, outgoing=True):
         """ Return number of (outgoing) edges incident to vertex v in the graph.
@@ -160,7 +161,7 @@ class Graph:
         v = self.Vertex(x)
         self._outgoing[v] = {}
         if self.is_directed():
-            self._incoming[v] = {}                                           # need distinct maps for incoming edges
+            self._incoming[v] = {}  # need distinct maps for incoming edges
         return v
 
     def insert_edge(self, u, v, x=None):
@@ -197,26 +198,26 @@ def DFS(g, u, discovered):
     discovered is a dictionary mapping each vertex to the edge that was used to
     discover it during the DFS (u should be "discoverd" prior to the call).
     Newly discovered vertices will be added to the dictionary as a result. """
-    for e in g.incident_edges(u):                                           # for every outgoing edge from u
+    for e in g.incident_edges(u):   # for every outgoing edge from u
         v = e.opposite(u)                                                   
-        if v not in discovered:                                             # v is an unvisited edge
-            discovered[v] = e                                               # e is the tree edge that discovered v
-            DFS(g, v, discovered)                                           # recursively explore from v
+        if v not in discovered:     # v is an unvisited edge
+            discovered[v] = e       # e is the tree edge that discovered v
+            DFS(g, v, discovered)   # recursively explore from v
 
 
 def construct_path(u, v, discovered):
     """ Construct path leading from vertex u to v, if v is reachable from u. """
-    path = []                                                               # empty path by default
+    path = []                       # empty path by default
     if v in discovered:
         # we build list from v to u and then reverse it at the end
         path.append(v)
         walk = v
         while walk is not u:
-            e = discovered[walk]                                            # find edge leading to walk
+            e = discovered[walk]    # find edge leading to walk
             parent = e.opposite(walk)
             path.append(parent)
             walk = parent
-        path.reverse()                                                      # reorient path from u to v
+        path.reverse()              # reorient path from u to v
     return path
 
 
@@ -227,7 +228,7 @@ def DFS_complete(g):
     forest = {}
     for u in g.vertices():
         if u not in forest():
-            forest[u] = None                                                # u will be the root of the tree
+            forest[u] = None    # u will be the root of the tree
             DFS(g, u, forest)
     return forest
 
@@ -236,22 +237,23 @@ def BFS(g, s, discovered):
     discovered is a dictionary mapping each vertex to the edge that was used to 
     discover it during the BFS (s should be mapped to None prior to the call).
     Newly discovered vertices will be added to the dictionary as a result. """
-    level = [s]                                                             # first level include only s
+    level = [s]             # first level include only s
     while len(level) > 0:
-        next_level = []                                                     # prepare to gather newly found vertices
+        next_level = []     # prepare to gather newly found vertices
         for u in level:
-            for e in g.incident_edges(u):                                   # for every outgoing edge from u
+            for e in g.incident_edges(u):   # for every outgoing edge from u
                 v = e.opposite(u)
-                if v not in discovered:                                     # v is an unvisited vertex
-                    discovered[v] = e                                       # e is the tree edge that discovered v
-                    next_level.append(v)                                    # v will be further considered in next pass
-        level = next_level                                                  # relabel 'next' level to become current
+                if v not in discovered:   # v is an unvisited vertex
+                    discovered[v] = e     # e is the tree edge that discovered v
+                    # v will be further considered in next pass
+                    next_level.append(v)
+        level = next_level      # relabel 'next' level to become current
 
 
 def floyd_warshall(g):
     """ Return a new graph that is the transitive closure of g. """
-    closure = deepcopy(g)                                                   # imported from copy modules 
-    vertices = list(g.vertices())                                           # make indexable list
+    closure = deepcopy(g)           # imported from copy modules 
+    vertices = list(g.vertices())   # make indexable list
     n = len(vertices)
     for k in range(n):
         for i in range(n):
@@ -270,9 +272,9 @@ def topological_sort(g):
     """Return a list of vertices of directed acyclic graph g in topological order.
     If graph g has a cycle, the result will be incomplete."""
 
-    topo = []                               # a list of vertices placed in topological order
-    ready = []                              # list of vertices that have no remaining constraints
-    incount = []                            # keep track of in-degree for each vertex
+    topo = []       # a list of vertices placed in topological order
+    ready = []      # list of vertices that have no remaining constraints
+    incount = []    # keep track of in-degree for each vertex
     for u in g.vertices():
         incount[u] = g.degree(u, False)     # parameter requests incoming degree
         if incount[u] == 0:                 # if u has no incoming edges
@@ -280,9 +282,10 @@ def topological_sort(g):
         while len(ready) > 0:
             u = ready.pop()                 # u is free of constraints
             topo.append(u)                  # add u to the topological order
-            for e in g.incedent_edges(u):   # consider all outgoing neighbors of u
+            for e in g.incedent_edges(u):   
+                # consider all outgoing neighbors of u
                 v = e.opposite(u)
-                incount[v] -= 1             # v has one less constraint without u
+                incount[v] -= 1         # v has one less constraint without u
                 if incount[v] == 0:
                     ready.append(v)
     return topo
@@ -355,7 +358,8 @@ def MST_PrimJarnik(g):
                 wgt = link.element()
                 if wgt < d[v]:              # better edge to v
                     d[v] = wgt              # update the distance
-                    pq.update(pqlocator[v], d[v], (v, link))    # update the pq entry
+                    # update the pq entry
+                    pq.update(pqlocator[v], d[v], (v, link))
 
     return tree
 
@@ -374,7 +378,7 @@ def MST_Kruskal(g):
         position[v] = forest.make_group(v)
 
     for e in g.edges():
-        pq.add(e.element(), e)              # edge's element is assumed to be its weighted
+        pq.add(e.element(), e)  # edge's element is assumed to be its weighted
 
     size = g.vertex_count()
     while len(tree) != size - 1 and not pq.is_empty():

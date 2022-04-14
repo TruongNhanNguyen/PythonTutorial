@@ -12,15 +12,17 @@ class SortedTableMap(MapBase):
            all items of slice table[idx:high+1] have key >= k
         """
         if high < low:
-            return high + 1                                 # no element qualifies
+            return high + 1         # no element qualifies
         else:
             mid = (low + high) // 2
             if k == self._table[mid]._key:
                 return mid
             elif k < self._table[mid]._key:
-                return self._find_index(k, low, mid - 1)    # note: may return mid
+                # note: may return mid
+                return self._find_index(k, low, mid - 1)
             else:
-                return self._find_index(k, mid + 1, high)   # answer is right for mid
+                # answer is right for mid
+                return self._find_index(k, mid + 1, high)   
 
     # public behaviors
     def __init__(self):
@@ -79,7 +81,7 @@ class SortedTableMap(MapBase):
 
     def find_ge(self, k):
         """ Return (key, value) pair with least key greater than or equal to k """
-        idx = self._find_index(k, 0, len(self._table) - 1)             # idx's key >= k
+        idx = self._find_index(k, 0, len(self._table) - 1)  # idx's key >= k
         if idx < len(self._table):
             return (self._table[idx]._key, self._table[idx]._value)
         else:
@@ -89,7 +91,8 @@ class SortedTableMap(MapBase):
         """ Return (key, value) pair with greatest key strictly less than k """
         idx = self._find_index(k, 0, len(self._table) - 1)
         if idx > 0:
-            return (self._table[idx - 1]._key, self._table[idx - 1]._value) # note use of idx - 1
+            # note use of idx - 1
+            return (self._table[idx - 1]._key, self._table[idx - 1]._value)
         else:
             return None
 
@@ -111,8 +114,10 @@ class SortedTableMap(MapBase):
         if start is None:
             idx = 0
         else:
-            idx = self._find_index(start, 0, len(self._table) - 1)        # find first result
-        while idx < len(self._table) and (stop is None or self._table[idx]._key < stop):
+            # find first result
+            idx = self._find_index(start, 0, len(self._table) - 1)
+        while idx < len(self._table) and (
+            stop is None or self._table[idx]._key < stop):
             yield (self._table[idx]._key, self._table[idx]._value)
             idx += 1
 

@@ -8,17 +8,17 @@ class CircularQueue():
 
     class _Node:
         """ Lightweight and nonpublic class for storing a singly linked node """
-        __slot__ = '_element', '_next'                 # streamline memory usage
+        __slot__ = '_element', '_next'          # streamline memory usage
 
         def __init__(self, element, next):
             """ Initialize node's fields """
-            self._element = element                    # reference to user's element
-            self._next = next                          # reference to next node
+            self._element = element             # reference to user's element
+            self._next = next                   # reference to next node
 
     def __init__(self):
         """ Create an empty queue """
-        self._tail = None                              # represent tail of the queue
-        self._size = 0                                 # number of queue elements
+        self._tail = None                       # represent tail of the queue
+        self._size = 0                          # number of queue elements
 
     def __len__(self):
         """ Return number of the elements of the queue """
@@ -33,18 +33,18 @@ class CircularQueue():
             Raise Empty error if the queue is empty """
         if self.is_empty():
             raise Empty('Queue is empty!')
-        head = self._tail._next                        # the head being after the tail
+        head = self._tail._next                 # the head being after the tail
         return head._element
 
     def enqueue(self, e):
         """ Add an element to the back of the queue """
-        newest = self._Node(e, None)                   # node will be the tail node
+        newest = self._Node(e, None)            # node will be the tail node
         if self.is_empty():
-            newest._next = newest                      # initialize circularly
+            newest._next = newest               # initialize circularly
         else:
-            newest._next = self._tail._next            # new node point to head
-            self._tail._next = newest                  # old tail point to new node
-        self._tail = newest                            # new node now become the tail
+            newest._next = self._tail._next     # new node point to head
+            self._tail._next = newest           # old tail point to new node
+        self._tail = newest                     # new node now become the tail
         self._size += 1
 
     def dequeue(self):
@@ -63,7 +63,7 @@ class CircularQueue():
     def rotate(self):
         """ Rotate front element to the back of the queue """
         if self._size > 0:
-            self._tail = self._tail._next              # old head become new tail
+            self._tail = self._tail._next       # old head become new tail
 
 
 q = CircularQueue()

@@ -13,12 +13,12 @@ class SplayTreeMap(TreeMap):
                 self._rotate(p)
             elif (parent == self.left(grand)) == (p == self.left(parent)):
                 # zig-zig case
-                self._rotate(parent)                                # move Parent up
-                self._rotate(p)                                     # then move p up
+                self._rotate(parent)    # move Parent up
+                self._rotate(p)         # then move p up
             else:
                 # zig-zag case
-                self._rotate(p)                                     # move p up
-                self._rotate(p)                                     # move p up again
+                self._rotate(p)         # move p up
+                self._rotate(p)         # move p up again
 
     # override balancing hooks
     def _rebalance_access(self, p):

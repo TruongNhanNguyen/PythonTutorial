@@ -14,14 +14,14 @@ class SortedPriorityQueue(PriorityQueueBase):
 
     def add(self, key, value):
         """ Add a key-value pair """
-        newest = self._Item(key, value)                     # make new item instance
-        walk = self._data.last()                            # walk backward looking for smaller item
+        newest = self._Item(key, value)     # make new item instance
+        walk = self._data.last()            # walk backward looking for smaller item
         while walk is not None and newest < walk.element():
             walk = self._data.before(walk)
         if walk is None:
-            self._data.add_first(newest)                    # new key is smallest
+            self._data.add_first(newest)    # new key is smallest
         else:
-            self._data.add_after(walk, newest)              # newest goes after walk
+            self._data.add_after(walk, newest)  # newest goes after walk
     
     def min(self):
         """ Return but not remove (k, v) tuple with minimum key """

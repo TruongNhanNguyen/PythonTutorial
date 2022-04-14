@@ -19,12 +19,12 @@ class Progression:
 
     def __next__(self):
         """ Return the next element, or else raise StopIteration error. """
-        if self._current is None:                # our convention to end a progression
+        if self._current is None:       # our convention to end a progression
             raise StopIteration()
         else:
-            answer = self._current               # record current value to return
-            self._advance()                      # advance to prepare for next time
-            return answer                        # return the answer
+            answer = self._current       # record current value to return
+            self._advance()              # advance to prepare for next time
+            return answer                # return the answer
 
     def __iter__(self):
         """ By convention an iterator must be return itself as an iterator """
@@ -46,10 +46,10 @@ class ArithmeticProgression(Progression):
         start       the first item of the progression (default 0)
          """
 
-        super().__init__(start)                  # initialize from base class
+        super().__init__(start)          # initialize from base class
         self._increment = increment
 
-    def _advance(self):                          # overide inherited method
+    def _advance(self):                  # overide inherited method
         """ Update current value by adding the fixed increment """
         self._current += self._increment
 
@@ -84,8 +84,8 @@ class FibonacciProgression(Progression):
         second       the second term of the progression (default 1)
          """
 
-        super().__init__(first)                  # start progeression at first
-        self._prev = second - first              # fictitious value preceding the first
+        super().__init__(first)          # start progeression at first
+        self._prev = second - first      # fictitious value preceding the first
 
     def _advance(self):
         """ Update current value by taking sum of previous two """

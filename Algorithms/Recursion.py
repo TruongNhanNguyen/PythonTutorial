@@ -3,7 +3,7 @@ import os
 
 def factorial(n):
     """ Return factorial of a given number"""
-    if n == 0:                    # base condition (terminate recursion)
+    if n == 0:      # base condition (terminate recursion)
         return 1
     # recur to factorial(n - 1) then result n! = n.factorial(n - 1)
     return n * factorial(n - 1)
@@ -19,11 +19,9 @@ def BinarySearch(data, target, low, high):
         mid = (low + high) // 2
         if target == data[mid]:         # found a match
             return True
-        elif target < data[mid]:
-            # recur on the position left of the middle
+        elif target < data[mid]:    # recur on the position left of the middle
             return BinarySearch(data, target, low, mid - 1)
-        elif target > data[mid]:
-            # recur on the position right of the middle
+        elif target > data[mid]:    # recur on the position right of the middle
             return BinarySearch(data, target, mid + 1, high)
 
 

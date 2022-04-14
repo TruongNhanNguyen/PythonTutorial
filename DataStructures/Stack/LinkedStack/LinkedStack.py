@@ -6,21 +6,21 @@ class Empty(Exception):
 class LinkedStack():
     """ LIFO Stack implementation using a singly linked list as underlying storage """
 
-    #--------------------------- nested Node class -----------------------------------
+    #--- nested Node class ---
     class _Node():
         """ Lightweight and nonpublic class for storing a singly linked node """
-        __slots__ = '_element', '_next'                     # streamline memory usage
+        __slots__ = '_element', '_next' # streamline memory usage
 
         def __init__(self, element, next):
             """ initialize node's fields """
-            self._element = element                         # reference to user's element
-            self._next = next                               # reference to next node
+            self._element = element     # reference to user's element
+            self._next = next           # reference to next node
 
-    #--------------------------- stack's methods -------------------------------------
+    #--- stack's methods ---
     def __init__(self):
         """ Create an empty stack """
-        self._head = None                                   # reference to the head node
-        self._size = 0                                      # number of stack elements
+        self._head = None               # reference to the head node
+        self._size = 0                  # number of stack elements
 
     def __len__(self):
         """ Return the numbers of elements in the stack """
@@ -32,7 +32,7 @@ class LinkedStack():
 
     def push(self, e):
         """ Add element to the top of the stack """
-        self._head = self._Node(e, self._head)              # create and link the new node
+        self._head = self._Node(e, self._head)  # create and link the new node
         self._size += 1
 
     def top(self):
@@ -55,10 +55,10 @@ class LinkedStack():
 
     def __iter__(self):
         """ Generate a forward iteration of the elements of the list """
-        cursor = self._head                             # begin traversal at the head of the list
-        while cursor is not None:                       # stop at the tail
-            yield cursor._element                       # generate node's element
-            cursor = cursor._next                       # advance cursor to next node
+        cursor = self._head          # begin traversal at the head of the list
+        while cursor is not None:    # stop at the tail
+            yield cursor._element    # generate node's element
+            cursor = cursor._next    # advance cursor to next node
 
 s = LinkedStack()
 s.push(1)

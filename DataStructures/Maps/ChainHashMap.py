@@ -12,11 +12,11 @@ class ChainHashMap(HashMapBase):
 
     def _bucket_setitem(self, j, k, v):
         if self._table[j] is None:
-            self._table[j] = UnsortedTableMap()             # bucket is new to the table
+            self._table[j] = UnsortedTableMap()     # bucket is new to the table
         old_size = len(self._table[j])
         self._table[j][k] = v
-        if len(self._table[j]) > old_size:                  # key was new to the table
-            self._n += 1                                    # increase overall map size
+        if len(self._table[j]) > old_size:          # key was new to the table
+            self._n += 1                            # increase overall map size
 
     def _bucket_delitem(self, j, k):
         bucket = self._table[j]

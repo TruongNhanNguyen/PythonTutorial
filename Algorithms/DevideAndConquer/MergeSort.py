@@ -36,4 +36,3 @@ def merge_sort(S):
 L = [2, 4, 5, 8, 11, 25, 24, 12, 19, 18, 22, 9, 3]
 merge_sort(L)
 print(L)
-

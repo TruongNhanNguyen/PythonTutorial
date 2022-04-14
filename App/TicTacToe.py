@@ -15,7 +15,7 @@ class TicTacToe:
 
     def mark(self, i, j):
         """ Put an X or O mark at position (i, j) for next player's turn. """
-        if not (0 <= i <= 2 and 0 <= j <= 2):
+        if not (0 <= i < self.ROWS and 0 <= j < self.COLS):
             raise ValueError('Invalid board position')
         if self._board[i][j] != ' ':
             raise ValueError('Board position occupied')

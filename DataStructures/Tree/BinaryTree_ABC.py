@@ -1,5 +1,6 @@
 from GeneralTree_ABC import Tree
 
+
 class BinaryTree(Tree):
     """ Abstract base class representing a binary tree structure """
 
@@ -18,13 +19,13 @@ class BinaryTree(Tree):
     def sibling(self, p):
         """ Return a Position representing p's sibling (or None if no sibling) """
         parent = self.parent(p)
-        if parent is None:                                  # p must be the root
-            return None                                     # root has no sibling
+        if parent is None:      # p must be the root
+            return None         # root has no sibling
         else:
             if p == self.left(parent):
-                return self.right(parent)                   # possibly None
+                return self.right(parent)   # possibly None
             else:
-                return self.left(parent)                    # possibly None
+                return self.left(parent)    # possibly None
 
     def children(self, p):
         """ Generate an iteration of Positions representing p's children """
@@ -32,15 +33,17 @@ class BinaryTree(Tree):
             yield self.left(p)
         if self.right(p) is not None:
             yield self.right(p)
-    
+
     def _subtree_inorder(self, p):
         """ Generate an inorder iteration of positions in subtree rooted at p """
-        if self.left(p) is not None:                        # if left child exist, traverse its subtree
+        # if left child exist, traverse its subtree
+        if self.left(p) is not None:
             for other in self._subtree_inorder(self.left(p)):
                 yield other
-        yield p                                             # visit p between its subtrees
+        yield p     # visit p between its subtrees
+        # if right child exits, traverse its subtree
         if self.right(p) is not None:
-            for other in self._subtree_inorder(self.right(p)): # if right child exits, traverse its subtree
+            for other in self._subtree_inorder(self.right(p)):
                 yield other
 
     def inorder(self):
@@ -51,4 +54,4 @@ class BinaryTree(Tree):
 
     def positions(self):
         """ Generate an iteration of tree's positions """
-        return self.inorder()                               # make inorder the default
+        return self.inorder()   # make inorder the default

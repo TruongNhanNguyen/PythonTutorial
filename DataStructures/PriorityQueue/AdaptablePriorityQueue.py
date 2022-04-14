@@ -6,7 +6,7 @@ class AdaptableHeap(HeapPriorityQueue):
     # nested Locator class
     class Locator(HeapPriorityQueue._Item):
         """ Token for locating an entry of the priority queue """
-        __slots__ = '_index'                        # add index as additional field
+        __slots__ = '_index'            # add index as additional field
 
         def __init__(self, k, v, j):
             super().__init__(k, v)
@@ -16,9 +16,9 @@ class AdaptableHeap(HeapPriorityQueue):
     # nonpublic behaviors
     # override swap to record new indices
     def _swap(self, i, j):
-        super()._swap(i, j)                         # perform the swap
-        self._data[i]._index = i                    # reset locator index (post-swap)
-        self._data[j]._index = j                    # reset locator index (post-swap)
+        super()._swap(i, j)             # perform the swap
+        self._data[i]._index = i        # reset locator index (post-swap)
+        self._data[j]._index = j        # reset locator index (post-swap)
 
 
     def _bubble(self, j):
@@ -30,7 +30,8 @@ class AdaptableHeap(HeapPriorityQueue):
 
     def add(self, key, value):
         """ Add a key-value pair. """
-        token = self.Locator(key, value, len(self._data))   # initialize locator index
+        # initialize locator index
+        token = self.Locator(key, value, len(self._data))
         self._data.append(token)
         self._up_heap(len(self._data) - 1)
         return token
@@ -51,10 +52,10 @@ class AdaptableHeap(HeapPriorityQueue):
         j = loc._index
         if not (0 <= j < len(self._data) and self._data[j] is loc):
             raise ValueError('Invalid locator')
-        if j == len(self) - 1:                              # item at last position
-            self._data.pop()                                # just remove it
+        if j == len(self) - 1:       # item at last position
+            self._data.pop()         # just remove it
         else:
-            self.swap(j, len(self) - 1)                     # swap item to the last position
-            self._data.pop()                                # remove it from the list
-            self._bubble(j)                                 # fix item displaced by the swap
+            self.swap(j, len(self) - 1)     # swap item to the last position
+            self._data.pop()                # remove it from the list
+            self._bubble(j)                 # fix item displaced by the swap
         return (loc._key, loc._value)

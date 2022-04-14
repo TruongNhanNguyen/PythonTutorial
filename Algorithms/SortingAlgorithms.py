@@ -1,9 +1,7 @@
 def bubbleSort(data):
-    """
-        Bubble sort algorithm is a sorting algorithm that 
+    """ Bubble sort algorithm is a sorting algorithm that 
         compare two adjacent elements and swap them if 
-        they are not in the intended order. 
-    """
+        they are not in the intended order."""
     for i in range(len(data)):
         for j in range(0, len(data) - i - 1):
             if data[j] > data[j + 1]:
@@ -11,12 +9,10 @@ def bubbleSort(data):
 
 
 def selectionSort(data):
-    """ 
-        Selection sort is a sorting algorithm that select
+    """ Selection sort is a sorting algorithm that select
         the smallest element from an unsorted list in 
         each iteration and places that element at the
-        beginning of the unsorted list.
-    """
+        beginning of the unsorted list."""
     for i in range(len(data)):
         min_index = i
         for j in range(i + 1, len(data)):
@@ -26,11 +22,9 @@ def selectionSort(data):
 
 
 def insertionSort(data):
-    """ 
-        Insertion sort is a sorting algorithm that place
+    """ Insertion sort is a sorting algorithm that place
         an unsorted element at its suitable place
-        in each iteration.
-    """
+        in each iteration."""
     for i in range(1, len(data)):
         key = data[i]
         j = i - 1
@@ -41,10 +35,8 @@ def insertionSort(data):
 
 
 def mergeSort(data):
-    """
-        This sort algorithm based on the principle
-        of Divide and Conquer Algorithm.
-    """
+    """ This sort algorithm based on the principle
+        of Divide and Conquer Algorithm."""
     if len(data) > 1:
         pos = len(data) // 2
         left = data[:pos]
@@ -76,9 +68,7 @@ def mergeSort(data):
 
 
 def partition(data, low, high):
-    """
-        Function to find the partition position.
-    """
+    """ Function to find the partition position."""
     pivot = data[high]
     i = low - 1
 
@@ -92,10 +82,8 @@ def partition(data, low, high):
 
 
 def quickSort(data, low, high):
-    """
-        Quick sort algorithm based on the principle
-        of Divide and Conquer Algorithm.
-    """
+    """ Quick sort algorithm based on the principle
+        of Divide and Conquer Algorithm."""
     if low < high:
         piv = partition(data, low, high)
         quickSort(data, low, piv - 1)
@@ -103,9 +91,7 @@ def quickSort(data, low, high):
 
 
 def heapify(data, n, i):
-    """
-        Function to build max_heap from list of elements.
-    """
+    """ Function to build max_heap from list of elements."""
     largest = i
     left = 2 * i + 1
     right = 2 * i + 2
@@ -122,9 +108,7 @@ def heapify(data, n, i):
 
 
 def heapSort(data):
-    """
-        Sorting algorithm based on heap.
-    """
+    """ Sorting algorithm based on heap."""
     for i in range(len(data) // 2, -1, -1):
         heapify(data, len(data), i)
 
@@ -134,11 +118,9 @@ def heapSort(data):
 
 
 def linearSearch(data, key):
-    """
-        Linear search is a sequential searching algorithm
+    """ Linear search is a sequential searching algorithm
         where start from the one end and check every
-        element of the list until the desired element is found.
-    """
+        element of the list until the desired element is found."""
     for i in range(len(data)):
         if data[i] == key:
             return i
@@ -146,10 +128,8 @@ def linearSearch(data, key):
 
 
 def binarySearch(data, key, low, high):
-    """
-        Binary search is a searching algorithm for finding an element's
-        position in a sorted array.
-    """
+    """ Binary search is a searching algorithm for finding an element's
+        position in a sorted array."""
     if low >= high:
         return -1
     mid = low + (high - low) // 2

@@ -1,5 +1,6 @@
 from LinkedQueue import LinkedQueue
 
+
 class Tree:
     """ Abstract base class representing a tree structure """
 
@@ -17,7 +18,7 @@ class Tree:
 
         def __ne__(self, other):
             """ Return True if other dose not represent the same location """
-            return not (self == other)                          # opposite of __eq__
+            return not (self == other)      # opposite of __eq__
 
     # abstract methods that concrete subclass must support
     def root(self):
@@ -52,7 +53,7 @@ class Tree:
     def is_empty(self):
         """ Return True if tree is empty """
         return len(self) == 0
-    
+
     def depth(self, p):
         """ Return the number of levels seperating Position p from the root """
         if self.is_root(p):
@@ -72,52 +73,52 @@ class Tree:
             If p is None, return the height of the entire tree """
         if p is None:
             p = self.root()
-        return self._subtree_height(p)                          # start _subtree_height recursion
-    
+        return self._subtree_height(p)      # start _subtree_height recursion
+
     # tree traversal methods
     def __iter__(self):
         """ Generate an iteration of the tree's elements """
-        for p in self.positions():                              # use same order as positions()
-            yield p.element()                                   # but yield each element
-    
+        for p in self.positions():          # use same order as positions()
+            yield p.element()               # but yield each element
 
     def _subtree_preorder(self, p):
-        """ Generate a preoder iteration of positions in subtree rooted at p"""
-        yield p                                                 # visit p before ist subtrees
-        for c in self.children(p):                              # for each child c
-            for other in self._subtree_preorder(c):             # do preoder of c's subtree
-                yield other                                     # yielding each to our caller
+        """ Generate a preorder iteration of positions in subtree rooted at p"""
+        yield p         # visit p before ist subtrees
+        for c in self.children(p):      # for each child c
+            # do preorder of c's subtree
+            for other in self._subtree_preorder(c):
+                yield other     # yielding each to our caller
 
     def preorder(self):
-        """ Generate a preoder iteration of positions in the tree """
+        """ Generate a preorder iteration of positions in the tree """
         if not self.is_empty():
-            for p in self._subtree_preorder(self.root()):        # start recursion
+            for p in self._subtree_preorder(self.root()):   # start recursion
                 yield p
 
     def positions(self):
         """ Generate an iteration of the tree's positions """
-        return self.preorder()                                   # return entire preoder iteration
+        return self.preorder()      # return entire preorder iteration
 
     def _subtree_postorder(self, p):
-        """ Generate a postoder iteration of positions in subtree rooted at p """
+        """ Generate a postorder iteration of positions in subtree rooted at p """
         for c in self.children(p):
             for other in self._subtree_postorder(c):
                 yield other
         yield p
 
     def postorder(self):
-        """ Generate a postoder iteration of positions in the tree """
+        """ Generate a postorder iteration of positions in the tree """
         if not self.is_empty():
             for p in self._subtree_postorder(self.root()):
                 yield p
 
     def breadthfirst(self):
         """ Generate a breadth-first iteration of the positions of the tree """
-        if not self.is_empty():                                 
-            fringe = LinkedQueue()                              # known position not yet yield
-            fringe.enqueue(self.root())                         # starting with root
+        if not self.is_empty():
+            fringe = LinkedQueue()      # known position not yet yield
+            fringe.enqueue(self.root())  # starting with root
             while not fringe.is_empty():
-                p = fringe.dequeue()                            # remove from front of the queue
-                yield p                                         # report this position
-                for c in self.children(p):                          
-                    fringe.enqueue(c)                           # add children to back of the queue
+                p = fringe.dequeue()    # remove from front of the queue
+                yield p                 # report this position
+                for c in self.children(p):
+                    fringe.enqueue(c)   # add children to back of the queue

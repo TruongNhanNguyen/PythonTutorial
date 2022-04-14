@@ -6,7 +6,7 @@ class Empty(Exception):
 class ArrayQueue():
     """ FIFO queue implementation using a Python list as underlying storage """
 
-    DEFAULT_CAPACITY = 10                       # moderate capacity for all new queue
+    DEFAULT_CAPACITY = 10       # moderate capacity for all new queue
 
     def __init__(self):
         """ Create an empty queue """
@@ -50,10 +50,10 @@ class ArrayQueue():
 
     def _resize(self, cap):
         """ Resize to a new list of capacity >= len(self._data) """
-        old = self._data                        # keep track of existing list
-        self._data = [None] * cap               # allocate list with new capacity
+        old = self._data                # keep track of existing list
+        self._data = [None] * cap       # allocate list with new capacity
         walk = self._front
-        for k in range(self._size):             # only consider existing elements
+        for k in range(self._size):     # only consider existing elements
             self._data[k] = old[walk]
-            walk = (1 + walk) % len(old)        # use old size as modulus
-        self._front = 0                         # front has been realigned
+            walk = (1 + walk) % len(old)    # use old size as modulus
+        self._front = 0                     # front has been realigned

@@ -4,21 +4,23 @@ class _DoublyLinkedBase:
     class _Node:
         """ Lightweight and nonpublic class for storing a doubly linked node """
 
-        __slot__ = '_element', '_prev', '_next'                 # streamline memory usage
+        __slot__ = '_element', '_prev', '_next'     # streamline memory usage
 
         def __init__(self, element, prev, next):
             """ Initialize node's fields """
-            self._element = element                             # node's element
-            self._prev = prev                                   # previous node reference
-            self._next = next                                   # next node reference
+            self._element = element     # node's element
+            self._prev = prev           # previous node reference
+            self._next = next           # next node reference
 
     def __init__(self):
         """ Create an empty list """
-        self._header = self._Node(None, None, None)             # header sentinel
-        self._trailer = self._Node(None, None, None)            # trailer sentinels
-        self._header._next = self._trailer                      # trailer is after heder
-        self._trailer._prev = self._header                      # header is before trailer
-        self._size = 0                                          # number of list elements
+        self._header = self._Node(
+            None, None, None)       # header sentinel
+        # trailer sentinels
+        self._trailer = self._Node(None, None, None)
+        self._header._next = self._trailer      # trailer is after heder
+        self._trailer._prev = self._header      # header is before trailer
+        self._size = 0                          # number of list elements
 
     def __len__(self):
         """ Return number of list elements """
@@ -30,7 +32,8 @@ class _DoublyLinkedBase:
 
     def _insert_between(self, e, predecessor, successor):
         """ Add an element between two existing nodes and return new node """
-        newest = self._Node(e, predecessor, successor)          # linked to neighbors
+        newest = self._Node(
+            e, predecessor, successor)          # linked to neighbors
         predecessor._next = newest
         successor._prev = newest
         self._size += 1
@@ -42,10 +45,11 @@ class _DoublyLinkedBase:
         successor = node._next
         predecessor._next = successor
         successor._prev = predecessor
-        self._size -= 1                                         
-        element = node._element                                 # recore deleted element
-        node._element = node._prev = node._next = None          # deprecated node
-        return element                                          # return deleted element
+        self._size -= 1
+        # recore deleted element
+        element = node._element
+        node._element = node._prev = node._next = None  # deprecated node
+        return element                                  # return deleted element
 
 
 class PositionalList(_DoublyLinkedBase):
@@ -57,14 +61,15 @@ class PositionalList(_DoublyLinkedBase):
 
         def __init__(self, container, node):
             """ Constructor should not be invoked by user """
-            
+
             __slot__ = '_container', '_node'
-            self._container = container                         # reference to the list contains node's position
-            self._node = node                                   # reference to current node
+            # reference to the list contains node's position
+            self._container = container
+            self._node = node           # reference to current node
 
         def element(self):
             """ Return the element stored at this position """
-            return self._node._element                          # node's element
+            return self._node._element  # node's element
 
         def __eq__(self, other):
             """ Return True if orther is a Position representing the same location """
@@ -72,7 +77,7 @@ class PositionalList(_DoublyLinkedBase):
 
         def __ne__(self, other):
             """ Return True if other dose not represent the same location """
-            return not (self == other)                          # opposite of __eq__
+            return not (self == other)  # opposite of __eq__
 
     # utility methods
     def _validate(self, p):
@@ -81,16 +86,17 @@ class PositionalList(_DoublyLinkedBase):
             raise TypeError('p must be proper Position type')
         if p._container is not self:
             raise ValueError('p does not belong to this container')
-        if p._node._next is None:                               # convention for deprecated node
+        if p._node._next is None:       # convention for deprecated node
             raise ValueError('p is not longer valid')
         return p._node
 
     def _make_position(self, node):
         """ Return Position instance for given node (or None if sentinels) """
-        if node is self._header or node is self._trailer:       # boundary violation
+        if node is self._header or node is self._trailer:   # boundary violation
             return None
         else:
-            return self.Position(self, node)                    # legitimate position
+            # legitimate position
+            return self.Position(self, node)
 
     # accessors
     def first(self):
@@ -110,19 +116,22 @@ class PositionalList(_DoublyLinkedBase):
         """ Return the Position just after the Position p (or None if p is last) """
         node = self._validate(p)
         return self._make_position(node._next)
-    
+
     def __iter__(self):
         """ Generate a forward iteration of the elements of the list """
-        cursor = self.first()                                   # begin from the head of the list
-        while cursor is not None:                               # iterate forward through the list
-            yield cursor.element()                              # print node's element at current position
-            cursor = self.after(cursor)                         # advance cursor
+        cursor = self.first()   # begin from the head of the list
+        while cursor is not None:   # iterate forward through the list
+            # print node's element at current position
+            yield cursor.element()
+            # advance cursor
+            cursor = self.after(cursor)
 
     # mutator
     # override inherited version to return Position, rether than Node
     def _insert_between(self, e, predecessor, successor):
         """ Add element e between existing nodes and return new Position """
-        node = super()._insert_between(e, predecessor, successor)  # call inherited method
+        # call inherited method
+        node = super()._insert_between(e, predecessor, successor)
         return self._make_position(node)
 
     def add_first(self, e):
@@ -146,14 +155,17 @@ class PositionalList(_DoublyLinkedBase):
     def delete(self, p):
         """ Remove and return the element at Position p """
         original = self._validate(p)
-        return self._delete_node(original)                      # inherited method returns element
+        # inherited method returns element
+        return self._delete_node(original)
 
     def replace(self, p, e):
         """ Replace the element at hte Position p with e.
             Return the element formerly at Position p  """
-        original = self._validate(p)                            # temporarily store old element
-        old_value = original._element                           # replace with new element
-        original._element = e                                   # return the old element value
+        original = self._validate(p)        # temporarily store old element
+        # replace with new element
+        old_value = original._element
+        # return the old element value
+        original._element = e
         return old_value
 
     def sort(self, * ,reverse = False):

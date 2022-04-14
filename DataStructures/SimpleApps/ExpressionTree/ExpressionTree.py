@@ -11,18 +11,19 @@ class ExpressionTree(LinkedBinaryTree):
             and left and right should be existing ExpressionTree instances
             that become the operands for the binary operator.
         """
-        super().__init__()                              # LinkedBinaryTree initialization
+        super().__init__()      # LinkedBinaryTree initialization
         if not isinstance(token, str):
             raise TypeError('Token must be a string')
-        self._add_root(token)                           # use inherited, nonpublic method
-        if left is not None:                            # presumably three parameter form
+        self._add_root(token)   # use inherited, nonpublic method
+        if left is not None:    # presumably three parameter form
             if token not in '+-*x/':
                 raise ValueError('Token must be a valid operator')
-            self._attach(self.root(), left, right)      # use inherited, nonpublic methos
+            # use inherited, nonpublic method
+            self._attach(self.root(), left, right)
     
     def __str__(self):
         """ Return string representation of the expression """
-        pieces = []                                     # sequence of piecewise strings to compose
+        pieces = []     # sequence of piecewise strings to compose
         self._parenthesize_recur(self.root(), pieces)
         return ''.join(pieces)
     
@@ -56,21 +57,21 @@ class ExpressionTree(LinkedBinaryTree):
             elif op == '/':
                 return left_val / right_val
             else:
-                return left_val * right_val             # treat 'x' or '*' as multiplication
+                return left_val * right_val # treat 'x' or '*' as multiplication
 
 
 def build_expression_tree(tokens):
     """ Return an ExpressionTree based upon by a tokenized expression """
-    S = []                                              # we use Python list as stack
+    S = []                  # we use Python list as stack
     for t in tokens:
-        if t in '+-x*/':                                # t is an operator symbol
-            S.append(t)                                 # push the operator symbol
-        elif t not in '()':                             # consider t to be literal
-            S.append(ExpressionTree(t))                 # push trivial tree storing value
-        elif t == ')':                                  # compose a new tree from three constituent parts
-            right = S.pop()                             # right subtree as per LIFO
-            op = S.pop()                                # operator symbol
-            left = S.pop()                              # left subtree
+        if t in '+-x*/':    # t is an operator symbol
+            S.append(t)     # push the operator symbol
+        elif t not in '()': # consider t to be literal
+            S.append(ExpressionTree(t))     # push trivial tree storing value
+        elif t == ')':      # compose a new tree from three constituent parts
+            right = S.pop() # right subtree as per LIFO
+            op = S.pop()    # operator symbol
+            left = S.pop()  # left subtree
             S.append(ExpressionTree(op, left, right))   # re-push tree
     # we ignore a left parenthesis
     return S.pop()

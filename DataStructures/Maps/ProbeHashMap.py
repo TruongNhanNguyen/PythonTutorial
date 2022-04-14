@@ -19,12 +19,12 @@ class ProbeHashMap(HashMapBase):
         while True:
             if self._is_available(j):
                 if firstAvail is None:
-                    firstAvail = j                      # mark this as first avail
+                    firstAvail = j              # mark this as first avail
                 if self._table[j] is None:
-                    return (False, firstAvail)          # search has failed
+                    return (False, firstAvail)  # search has failed
             elif k == self._table[j]._key:
-                return (True, j)                        # found a match
-            j = (j + 1) % len(self._table)              # keep looking (cyclically)
+                return (True, j)                # found a match
+            j = (j + 1) % len(self._table)      # keep looking (cyclically)
 
     def _bucket_getitem(self, j, k):
         found, s = self._find_slot(j, k)
